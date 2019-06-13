@@ -30,9 +30,21 @@ variable "port_mappings" {
 }
 
 variable "healthcheck" {
-  type        = "map"
-  description = "A map containing command (string), interval (duration in seconds), retries (1-10, number of times to retry before marking container unhealthy, and startPeriod (0-300, optional grace period to wait, in seconds, before failed healthchecks count toward retries)"
-  default     = {}
+  type = object({
+    command     = list(string),
+    retries     = number
+    interval    = number
+    timeout     = number,
+    startPeriod = number
+  })
+  description = "An object containing command (list of string), interval (duration in seconds), retries (1-10, number of times to retry before marking container unhealthy, and startPeriod (0-300, optional grace period to wait, in seconds, before failed healthchecks count toward retries)"
+  default = {
+    command     = [],
+    retries     = 1,
+    interval    = 30
+    timeout     = 5,
+    startPeriod = 15
+  }
 }
 
 variable "container_cpu" {
